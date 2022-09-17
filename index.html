@@ -54,12 +54,16 @@
 				height: 100%;
 				flex-direction: column;
 				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: xx-large;
 			}
 			.left {
 				width: 40%;
 				height: 100%;
 				flex-direction: column;
 				display: flex;
+				margin-left: 40px;
 			}
 			#selection {
 				display: flex;
@@ -95,8 +99,11 @@
 			}
 			.back {
 				cursor: pointer;
-				margin-left: 40px;
 				margin-top: 20px;
+			}
+			#map {
+				margin-top: 60px;
+				width: 100%;
 			}
 			@media only screen and (max-width: 900px) {
 				#selection {
@@ -112,7 +119,7 @@
 	</head>
 	<body>
 		<div id="card">
-			<div class="hidden" id="selection">
+			<div id="selection">
 				<div class="cardItems" onclick="selectFeature('select')">
 					<img src="server.png" alt="select server" width="55%" />
 					<p class="lightText">Select Server</p>
@@ -122,7 +129,7 @@
 					<p class="lightText">Leaderboard</p>
 				</div>
 			</div>
-			<div id="feature1">
+			<div class="hidden" id="feature1">
 				<div class="left">
 					<img
 						src="left-arrow.png"
@@ -131,10 +138,33 @@
 						class="back"
 						onclick="selectFeature('feature1')"
 					/>
-					<button type="button" onclick="pingTest()">Ping!</button>
-					<p class="ping"></p>
+					<img src="map.jpg" alt="map" id="map" />
+					<p style="margin-top: 40px">Select an availability zone!</p>
+					<select title="location" name="location" id="location">
+						<option disabled selected>Select a zone!</option>
+						<option value="us-west-1 California">California</option>
+						<option value="ap-east-1 Hong-Kong">Hong Kong</option>
+						<option value="eu-west-1 Ireland">Ireland</option>
+						<option value="ap-southeast-3 Jakarta">Jakarta</option>
+						<option value="eu-west-2 London">London</option>
+						<option value="us-east-2 Ohio">Ohio</option>
+						<option value="us-west-2 Oregon">Oregon</option>
+						<option value="ap-southeast-1 Singapore">Singapore</option>
+						<option value="us-east-1 Virginia">Virginia</option>
+					</select>
+					<button
+						type="button"
+						onclick="pingTest()"
+						style="margin-top: 20px; background-color: #2b4865; color: white"
+					>
+						Ping!
+					</button>
 				</div>
-				<div class="right"></div>
+				<div class="right">
+					<p id="ping"></p>
+					<p id="zone" style="margin-bottom: 0"></p>
+					<p id="zonecode"></p>
+				</div>
 			</div>
 			<div class="hidden" id="feature2">
 				<div class="left">
@@ -145,8 +175,6 @@
 						class="back"
 						onclick="selectFeature('feature2')"
 					/>
-					<button type="button" onclick="pingTest()">Hello!</button>
-					<p class="ping"></p>
 				</div>
 				<div class="right"></div>
 			</div>
@@ -156,14 +184,16 @@
 			var p = new Ping();
 
 			function pingTest() {
-				p.ping(
-					'https://dynamodb.ap-southeast-1.amazonaws.com',
-					function (err, data) {
-						// Also display error if err is returned.
+				let location = document.getElementById('location').value;
+				let zone = location.split(' ')[0];
+				let country = location.split(' ')[1].replace('-', ' ');
+				p.ping(`https://dynamodb.${zone}.amazonaws.com`, function (err, data) {
+					// Also display error if err is returned.
 
-						document.getElementById('ping').innerHTML = data + 'ms';
-					}
-				);
+					document.getElementById('ping').innerHTML = data + 'ms';
+					document.getElementById('zone').innerHTML = country;
+					document.getElementById('zonecode').innerHTML = zone;
+				});
 			}
 
 			var state = 'none';
