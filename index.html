@@ -49,13 +49,17 @@
 				justify-content: center;
 				background-color: white;
 			}
-			#right {
+			.right {
 				width: 60%;
 				height: 100%;
+				flex-direction: column;
+				display: flex;
 			}
-			#left {
+			.left {
 				width: 40%;
 				height: 100%;
+				flex-direction: column;
+				display: flex;
 			}
 			#selection {
 				display: flex;
@@ -78,6 +82,22 @@
 			.lightText {
 				color: #e7eaf0;
 			}
+
+			#feature1 {
+				display: flex;
+				align-items: center;
+				justify-content: flex-start;
+				width: 100%;
+			}
+
+			.hidden {
+				display: none !important;
+			}
+			.back {
+				cursor: pointer;
+				margin-left: 40px;
+				margin-top: 20px;
+			}
 			@media only screen and (max-width: 900px) {
 				#selection {
 					flex-direction: column;
@@ -92,21 +112,44 @@
 	</head>
 	<body>
 		<div id="card">
-			<div id="selection">
-				<div class="cardItems">
+			<div class="hidden" id="selection">
+				<div class="cardItems" onclick="selectFeature('select')">
 					<img src="server.png" alt="select server" width="55%" />
 					<p class="lightText">Select Server</p>
 				</div>
-				<div class="cardItems">
+				<div class="cardItems" onclick="selectFeature('leaderboard')">
 					<img src="leaderboard.png" alt="select server" width="55%" />
 					<p class="lightText">Leaderboard</p>
 				</div>
 			</div>
-			<!-- <div id="left">
-				<button type="button" onclick="pingTest()">Ping!</button>
-				<p id="ping"></p> 
+			<div id="feature1">
+				<div class="left">
+					<img
+						src="left-arrow.png"
+						alt="back"
+						width="40px"
+						class="back"
+						onclick="selectFeature('feature1')"
+					/>
+					<button type="button" onclick="pingTest()">Ping!</button>
+					<p class="ping"></p>
+				</div>
+				<div class="right"></div>
 			</div>
-			<div id="right"></div> -->
+			<div class="hidden" id="feature2">
+				<div class="left">
+					<img
+						src="left-arrow.png"
+						alt="back"
+						width="40px"
+						class="back"
+						onclick="selectFeature('feature2')"
+					/>
+					<button type="button" onclick="pingTest()">Hello!</button>
+					<p class="ping"></p>
+				</div>
+				<div class="right"></div>
+			</div>
 		</div>
 
 		<script>
@@ -124,6 +167,20 @@
 			}
 
 			var state = 'none';
+
+			function selectFeature(feature) {
+				state = feature;
+				if (feature == 'select') {
+					document.getElementById('selection').classList.add('hidden');
+					document.getElementById('feature1').classList.remove('hidden');
+				} else if (feature == 'leaderboard') {
+					document.getElementById('selection').classList.add('hidden');
+					document.getElementById('feature2').classList.remove('hidden');
+				} else {
+					document.getElementById(feature).classList.add('hidden');
+					document.getElementById('selection').classList.remove('hidden');
+				}
+			}
 		</script>
 	</body>
 </html>
