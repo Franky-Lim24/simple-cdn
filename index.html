@@ -118,7 +118,8 @@
 					width: 200px;
 					height: 200px;
 				}
-				#feature1 {
+				#feature1,
+				#feature2 {
 					flex-direction: column;
 				}
 				.left {
@@ -131,6 +132,15 @@
 				#card {
 					height: 90vh;
 					margin-top: 5vh;
+				}
+				#map2 {
+					margin-top: 30px !important;
+				}
+				.textSmall {
+					font-size: small;
+				}
+				#map1 {
+					margin-top: 10px !important;
 				}
 			}
 		</style>
@@ -147,7 +157,7 @@
 					<p class="lightText">Leaderboard</p>
 				</div>
 			</div>
-			<div id="feature1">
+			<div class="hidden" id="feature1">
 				<div class="left">
 					<img
 						src="left-arrow.png"
@@ -156,7 +166,7 @@
 						class="back"
 						onclick="selectFeature('feature1')"
 					/>
-					<img src="map.jpg" alt="map" class="map" />
+					<img src="map.jpg" alt="map" class="map" id="map1" />
 					<p style="margin-top: 40px">Select an availability zone!</p>
 					<select title="location" name="location" id="location">
 						<option disabled selected>Select a zone!</option>
@@ -184,7 +194,7 @@
 					<p id="zonecode"></p>
 				</div>
 			</div>
-			<div class="hidden" id="feature2">
+			<div id="feature2">
 				<div class="left">
 					<img
 						src="left-arrow.png"
@@ -193,7 +203,13 @@
 						class="back"
 						onclick="selectFeature('feature2')"
 					/>
-					<img src="map.jpg" alt="map" class="map" style="margin-top: 120px" />
+					<img
+						src="map.jpg"
+						alt="map"
+						class="map"
+						style="margin-top: 120px"
+						id="map2"
+					/>
 
 					<button
 						type="button"
@@ -280,6 +296,7 @@
 					item.classList.add('item');
 					let z = document.createElement('p');
 					z.innerHTML = country + ' ' + location + ' ' + ping + 'ms';
+					z.classList.add('textSmall');
 					item.append(z);
 					leaderboard.append(item);
 				}
