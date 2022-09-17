@@ -107,6 +107,9 @@
 				width: 100%;
 			}
 			@media only screen and (max-width: 900px) {
+				p {
+					font-size: medium;
+				}
 				#selection {
 					flex-direction: column;
 					gap: 10vh;
@@ -115,12 +118,26 @@
 					width: 200px;
 					height: 200px;
 				}
+				#feature1 {
+					flex-direction: column;
+				}
+				.left {
+					margin-left: 0;
+					width: 90%;
+				}
+				.right {
+					width: 90%;
+				}
+				#card {
+					height: 90vh;
+					margin-top: 5vh;
+				}
 			}
 		</style>
 	</head>
 	<body>
 		<div id="card">
-			<div id="selection">
+			<div class="hidden" id="selection">
 				<div class="cardItems" onclick="selectFeature('select')">
 					<img src="server.png" alt="select server" width="55%" />
 					<p class="lightText">Select Server</p>
@@ -130,7 +147,7 @@
 					<p class="lightText">Leaderboard</p>
 				</div>
 			</div>
-			<div class="hidden" id="feature1">
+			<div id="feature1">
 				<div class="left">
 					<img
 						src="left-arrow.png"
