@@ -87,7 +87,8 @@
 				color: #e7eaf0;
 			}
 
-			#feature1 {
+			#feature1,
+			#feature2 {
 				display: flex;
 				align-items: center;
 				justify-content: flex-start;
@@ -101,7 +102,7 @@
 				cursor: pointer;
 				margin-top: 20px;
 			}
-			#map {
+			.map {
 				margin-top: 60px;
 				width: 100%;
 			}
@@ -138,7 +139,7 @@
 						class="back"
 						onclick="selectFeature('feature1')"
 					/>
-					<img src="map.jpg" alt="map" id="map" />
+					<img src="map.jpg" alt="map" class="map" />
 					<p style="margin-top: 40px">Select an availability zone!</p>
 					<select title="location" name="location" id="location">
 						<option disabled selected>Select a zone!</option>
@@ -175,8 +176,17 @@
 						class="back"
 						onclick="selectFeature('feature2')"
 					/>
+					<img src="map.jpg" alt="map" class="map" style="margin-top: 120px" />
+
+					<button
+						type="button"
+						onclick="pingAll()"
+						style="margin-top: 20px; background-color: #2b4865; color: white"
+					>
+						Ping!
+					</button>
 				</div>
-				<div class="right"></div>
+				<div class="right" id="leaderboard"></div>
 			</div>
 		</div>
 
@@ -210,6 +220,59 @@
 					document.getElementById(feature).classList.add('hidden');
 					document.getElementById('selection').classList.remove('hidden');
 				}
+			}
+
+			const locationDict = {
+				'us-west-1': 'California',
+				'ap-east-1': 'Hong-Kong',
+				'eu-west-1': 'Ireland',
+				'ap-southeast-3': 'Jakarta',
+				'eu-west-2': 'London',
+				'us-east-2': 'Ohio',
+				'us-west-2': 'Oregon',
+				'ap-southeast-1': 'Singapore',
+				'us-east-1': 'Virginia',
+			};
+
+			var pingDict = [];
+
+			function pingAll() {
+				let count = 0;
+				pingDict = [];
+				for (const [key, value] of Object.entries(locationDict)) {
+					p.ping(`https://dynamodb.${key}.amazonaws.com`, function (err, data) {
+						// Also display error if err is returned.
+						pingDict[count++] = key + ' ' + value + ' ' + data;
+						if (count == 9) {
+							displayLeaderboard();
+						}
+					});
+				}
+			}
+
+			function displayLeaderboard() {
+				sortArray();
+				let leaderboard = document.getElementById('leaderboard');
+				leaderboard.innerHTML = '';
+				for (let x = 0; x < 5; x++) {
+					let location = pingDict[x].split(' ')[0];
+					let country = pingDict[x].split(' ')[1].replace('-', ' ');
+					let ping = pingDict[x].split(' ')[2];
+
+					let item = document.createElement('div');
+					item.classList.add('item');
+					let z = document.createElement('p');
+					z.innerHTML = country + ' ' + location + ' ' + ping + 'ms';
+					item.append(z);
+					leaderboard.append(item);
+				}
+			}
+
+			function sortArray() {
+				let arr = Object.values(pingDict);
+				arr.sort(function (a, b) {
+					return a.split(' ')[2] - b.split(' ')[2];
+				});
 			}
 		</script>
 	</body>
